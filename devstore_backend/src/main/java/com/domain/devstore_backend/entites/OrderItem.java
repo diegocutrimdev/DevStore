@@ -3,6 +3,7 @@ package com.domain.devstore_backend.entites;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Getter
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_items")
-public class OrderItem {
+public class OrderItem implements Serializable {
     @EmbeddedId
     private OrderItemPK id = new OrderItemPK();
     private Integer quantity;
@@ -33,7 +34,7 @@ public class OrderItem {
         id.setOrder(order);
     }
 
-    public Product setProduct() {
+    public Product getProduct() {
         return id.getProduct();
     }
 

@@ -3,6 +3,7 @@ package com.domain.devstore_backend.entites;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Getter
@@ -14,7 +15,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "payments")
-public class Payment {
+public class Payment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

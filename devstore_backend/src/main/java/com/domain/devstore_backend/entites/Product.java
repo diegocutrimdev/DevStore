@@ -3,6 +3,9 @@ package com.domain.devstore_backend.entites;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 import java.math.BigDecimal;
@@ -16,7 +19,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,4 +35,11 @@ public class Product {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
+
+    @OneToMany(mappedBy = "id.product")
+    private List<OrderItem> items = new ArrayList<>();
+
+    public List<Order> getOrder() {
+        return items.stream().map(OrderItem::getOrder).toList();
+    }
 }

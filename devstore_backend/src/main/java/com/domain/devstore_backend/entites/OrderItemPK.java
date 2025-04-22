@@ -3,6 +3,8 @@ package com.domain.devstore_backend.entites;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -10,7 +12,7 @@ import lombok.*;
 @EqualsAndHashCode
 
 @Embeddable
-public class OrderItemPK {
+public class OrderItemPK implements Serializable {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

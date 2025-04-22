@@ -3,6 +3,7 @@ package com.domain.devstore_backend.entites;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -15,7 +16,7 @@ import java.util.HashSet;
 
 @Entity
 @Table(name = "categories")
-public class Category {
+public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

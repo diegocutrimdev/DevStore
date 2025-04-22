@@ -15,9 +15,9 @@ CREATE TABLE orders (
     moment TIMESTAMP NOT NULL,
     status VARCHAR(20) NOT NULL CHECK (status IN ('PENDING', 'PAID', 'SHIPPED', 'DELIVERED', 'CANCELED')),
     user_id BIGINT NOT NULL,
-    payment_moment TIMESTAMP,  -- Campo adicionado para armazenar o momento do pagamento
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
 
 CREATE TABLE products (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -49,3 +49,11 @@ CREATE TABLE order_item (
     FOREIGN KEY (order_id) REFERENCES orders(id),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
+
+CREATE TABLE payments (
+    id BIGINT PRIMARY KEY, -- mesmo valor de order_id
+    moment TIMESTAMP NOT NULL,
+    order_id BIGINT NOT NULL UNIQUE,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+);
+

@@ -1,11 +1,11 @@
-package com.domain.devstore_backend.entites;
+package com.domain.devstore_backend.entities;
 
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.util.Set;
 import java.util.HashSet;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -19,7 +19,7 @@ import java.util.HashSet;
 public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String name;
 
     @ManyToMany(mappedBy = "categories")

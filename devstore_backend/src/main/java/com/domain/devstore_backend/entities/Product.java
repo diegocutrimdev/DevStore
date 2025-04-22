@@ -1,17 +1,18 @@
-package com.domain.devstore_backend.entites;
+package com.domain.devstore_backend.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+import java.util.List;
 import java.util.HashSet;
+import java.util.ArrayList;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +23,7 @@ import java.math.BigDecimal;
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String name;
 
     @Column(columnDefinition = "TEXT")

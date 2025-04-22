@@ -1,4 +1,4 @@
-package com.domain.devstore_backend.entites;
+package com.domain.devstore_backend.entities;
 
 import lombok.*;
 import jakarta.persistence.*;

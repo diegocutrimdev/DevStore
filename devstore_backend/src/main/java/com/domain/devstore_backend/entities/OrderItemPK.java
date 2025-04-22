@@ -1,7 +1,7 @@
-package com.domain.devstore_backend.entites;
+package com.domain.devstore_backend.entities;
 
-import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 

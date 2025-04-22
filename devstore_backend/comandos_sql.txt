@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     phone VARCHAR(20),
@@ -11,16 +11,16 @@ CREATE TABLE users (
 
 
 CREATE TABLE orders (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     moment TIMESTAMP NOT NULL,
     status VARCHAR(20) NOT NULL CHECK (status IN ('PENDING', 'PAID', 'SHIPPED', 'DELIVERED', 'CANCELED')),
-    user_id BIGINT NOT NULL,
+    user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 
 CREATE TABLE products (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
     price DECIMAL(15, 2) NOT NULL,
@@ -28,21 +28,21 @@ CREATE TABLE products (
 );
 
 CREATE TABLE categories (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE product_category (
-    product_id BIGINT NOT NULL,
-    category_id BIGINT NOT NULL,
+    product_id INT NOT NULL,
+    category_id INT NOT NULL,
     PRIMARY KEY (product_id, category_id),
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
 CREATE TABLE order_item (
-    order_id BIGINT NOT NULL,
-    product_id BIGINT NOT NULL,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
     quantity INT NOT NULL,
     price DECIMAL(15, 2) NOT NULL,
     PRIMARY KEY (order_id, product_id),
@@ -51,9 +51,18 @@ CREATE TABLE order_item (
 );
 
 CREATE TABLE payments (
-    id BIGINT PRIMARY KEY, -- mesmo valor de order_id
+    id INT PRIMARY KEY, -- mesmo valor de order_id
     moment TIMESTAMP NOT NULL,
-    order_id BIGINT NOT NULL UNIQUE,
+    order_id INT NOT NULL UNIQUE,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 
+CREATE TABLE order_items (
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT fk_order FOREIGN KEY (order_id) REFERENCES orders(id),
+    CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES products(id),
+    PRIMARY KEY (order_id, product_id)
+);

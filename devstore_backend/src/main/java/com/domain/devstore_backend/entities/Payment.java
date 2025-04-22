@@ -1,10 +1,10 @@
-package com.domain.devstore_backend.entites;
+package com.domain.devstore_backend.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.time.Instant;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -18,7 +18,7 @@ import java.time.Instant;
 public class Payment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private Instant moment;
 
     @MapsId

@@ -1,12 +1,12 @@
-package com.domain.devstore_backend.entites;
+package com.domain.devstore_backend.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
+import java.util.List;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -20,7 +20,7 @@ import java.util.List;
 public class Order implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private Instant moment;
 
     @Enumerated(EnumType.STRING)

@@ -1,11 +1,11 @@
-package com.domain.devstore_backend.entites;
+package com.domain.devstore_backend.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String name;
     private String email;
     private String phone;

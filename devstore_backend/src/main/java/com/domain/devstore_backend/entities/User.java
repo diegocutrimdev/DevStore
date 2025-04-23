@@ -35,6 +35,23 @@ public class User implements UserDetails, Serializable {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+
+    public User(
+            String name,
+            String email,
+            String phone,
+            LocalDate birthDate,
+            String password,
+            UserRole role) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.birthDate = birthDate;
+        this.password = password;
+        this.role = role;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (role == UserRole.ADMIN) return List.of(
@@ -44,25 +61,30 @@ public class User implements UserDetails, Serializable {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
+
     @Override
     public String getUsername() {
         return email;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
 
     @Override
     public boolean isEnabled() {

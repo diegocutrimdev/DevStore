@@ -1,5 +1,6 @@
 package com.domain.devstore_backend.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<ProductDto> create(@RequestBody ProductDto dto) {
+    public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductDto dto) {
         var product = ProductMapper.toProduct(dto);
         var savedProduct = productService.create(product);
         var productDto = ProductMapper.toDto(savedProduct);
@@ -43,7 +44,7 @@ public class ProductController {
 
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ProductDto> update(@PathVariable Integer id, @RequestBody ProductDto dto) {
+    public ResponseEntity<ProductDto> update(@PathVariable Integer id, @Valid @RequestBody ProductDto dto) {
         var product = ProductMapper.toProduct(dto);
         var updatedProduct = productService.update(id, product);
         var productDto = ProductMapper.toDto(updatedProduct);

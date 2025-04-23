@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.domain.devstore_backend.entities.Product;
 import com.domain.devstore_backend.services.ProductService;
+import org.springframework.transaction.annotation.Transactional;
+import com.domain.devstore_backend.exceptions.BadRequestException;
 import com.domain.devstore_backend.repositories.ProductRepository;
+import com.domain.devstore_backend.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -16,27 +19,31 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<Product> findAll() {
         return productRepository.findAll();
     }
 
 
     @Override
+    @Transactional(readOnly = true)
     public Product findById(Integer id) {
         idValidation(id);
-        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Resource not found"));
+        return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
     }
 
 
     @Override
+    @Transactional
     public Product create(Product product) {
         if (productRepository.existsByName(product.getName()))
-            throw new IllegalArgumentException("A product with this name already exists");
+            throw new BadRequestException("A product with this name already exists");
         return productRepository.save(product);
     }
 
 
     @Override
+    @Transactional
     public Product update(Integer id, Product product) {
         idValidation(id);
         product.setId(id);
@@ -45,6 +52,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         idValidation(id);
         productRepository.deleteById(id);
@@ -55,6 +63,6 @@ public class ProductServiceImpl implements ProductService {
         if (id == null || id <= 0)
             throw new IllegalArgumentException("Id must be a positive number");
         if (!productRepository.existsById(id))
-            throw new RuntimeException("Product with ID " + id + " not found");
+            throw new ResourceNotFoundException("Product with ID " + id + " not found");
     }
 }

@@ -3,10 +3,10 @@ package com.domain.devstore_backend.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.domain.devstore_backend.dto.ProductDto;
 import com.domain.devstore_backend.mapper.ProductMapper;
 import com.domain.devstore_backend.services.ProductService;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,5 +39,21 @@ public class ProductController {
         var savedProduct = productService.create(product);
         var productDto = ProductMapper.toDto(savedProduct);
         return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
+    }
+
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ProductDto> update(@PathVariable Integer id, @RequestBody ProductDto dto) {
+        var product = ProductMapper.toProduct(dto);
+        var updatedProduct = productService.update(id, product);
+        var productDto = ProductMapper.toDto(updatedProduct);
+        return ResponseEntity.status(HttpStatus.OK).body(productDto);
+    }
+
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+        productService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

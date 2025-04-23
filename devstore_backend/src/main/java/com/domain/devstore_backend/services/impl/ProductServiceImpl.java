@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product findById(Integer id) {
-        if (id == null || id <= 0) throw new IllegalArgumentException("Id must be a positive number");
+        idValidation(id);
         return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Resource not found"));
     }
 
@@ -38,12 +38,23 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product update(Integer id, Product product) {
-        return null;
+        idValidation(id);
+        product.setId(id);
+        return productRepository.save(product);
     }
 
 
     @Override
     public void delete(Integer id) {
+        idValidation(id);
+        productRepository.deleteById(id);
+    }
 
+
+    private void idValidation(Integer id) {
+        if (id == null || id <= 0)
+            throw new IllegalArgumentException("Id must be a positive number");
+        if (!productRepository.existsById(id))
+            throw new RuntimeException("Product with ID " + id + " not found");
     }
 }

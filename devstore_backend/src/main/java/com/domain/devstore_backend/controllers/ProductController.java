@@ -6,10 +6,9 @@ import org.springframework.http.ResponseEntity;
 import com.domain.devstore_backend.dto.ProductDto;
 import com.domain.devstore_backend.mapper.ProductMapper;
 import com.domain.devstore_backend.services.ProductService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +16,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+
+
+    @GetMapping
+    public ResponseEntity<List<ProductDto>> findAll() {
+        List<ProductDto> productDtoList = ProductMapper.toListDto(productService.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(productDtoList);
+    }
+
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ProductDto> findById(@PathVariable Integer id) {
+        var product = productService.findById(id);
+        var productDto = ProductMapper.toDto(product);
+        return ResponseEntity.status(HttpStatus.OK).body(productDto);
+    }
 
 
     @PostMapping

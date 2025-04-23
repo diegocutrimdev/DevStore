@@ -17,13 +17,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> findAll() {
-        return List.of();
+        return productRepository.findAll();
     }
 
 
     @Override
-    public Product findById(Long id) {
-        return null;
+    public Product findById(Integer id) {
+        if (id == null || id <= 0) throw new IllegalArgumentException("Id must be a positive number");
+        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Resource not found"));
     }
 
 
@@ -36,13 +37,13 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public Product update(Long id, Product product) {
+    public Product update(Integer id, Product product) {
         return null;
     }
 
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
 
     }
 }

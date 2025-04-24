@@ -4,7 +4,7 @@ import com.domain.devstore_backend.entities.UserRole;
 
 import java.time.LocalDate;
 
-public record RegisterDto(
+public record RegisterUserDto(
         String name,
         String email,
         String phone,

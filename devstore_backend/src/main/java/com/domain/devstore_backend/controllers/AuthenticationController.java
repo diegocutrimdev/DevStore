@@ -1,5 +1,8 @@
 package com.domain.devstore_backend.controllers;
 
+import com.domain.devstore_backend.dto.LoginResponseDto;
+import com.domain.devstore_backend.entities.User;
+import com.domain.devstore_backend.services.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import com.domain.devstore_backend.dto.RegisterUserDto;
@@ -20,6 +23,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 @RequestMapping(value = "/auth")
 public class AuthenticationController {
 
+    private final TokenService tokenService;
     private final AuthenticationService authenticationService;
     private final AuthenticationManager authenticationManager;
 
@@ -28,7 +32,8 @@ public class AuthenticationController {
     public ResponseEntity login(@RequestBody AuthenticationDto dto) {
         var usernameAndPassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var auth = authenticationManager.authenticate(usernameAndPassword);
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDto(token));
     }
 
 

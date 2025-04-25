@@ -25,11 +25,10 @@ public class TokenServiceImpl implements TokenService {
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.create()
-                    .withIssuer("devstore api")
-                    .withSubject(user.getEmail())
-                    .withExpiresAt(generateExpirationDate())
-                    .sign(algorithm);
+
+            return JWT.create().withIssuer("devstore api").withSubject(user.getUsername())
+                    .withExpiresAt(generateExpirationDate()).sign(algorithm);
+
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Error while generating token", exception);
         }
@@ -40,11 +39,10 @@ public class TokenServiceImpl implements TokenService {
     public String validateToken(String token) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
-                    .withIssuer("devstore api")
-                    .build()
-                    .verify(token)
-                    .getSubject();
+
+            return JWT.require(algorithm).withIssuer("devstore api").build()
+                    .verify(token).getSubject();
+
         } catch (JWTVerificationException exception) {
             return "";
         }
@@ -52,6 +50,6 @@ public class TokenServiceImpl implements TokenService {
 
 
     private Instant generateExpirationDate() {
-        return LocalDateTime.now().plusHours(1).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }

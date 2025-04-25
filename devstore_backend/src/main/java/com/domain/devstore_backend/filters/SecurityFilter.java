@@ -1,16 +1,16 @@
 package com.domain.devstore_backend.filters;
 
-import com.domain.devstore_backend.repositories.UserRepository;
-import com.domain.devstore_backend.services.TokenService;
 import jakarta.servlet.FilterChain;
+import lombok.RequiredArgsConstructor;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import com.domain.devstore_backend.services.TokenService;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.domain.devstore_backend.repositories.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import java.io.IOException;
 

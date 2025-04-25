@@ -1,15 +1,15 @@
 package com.domain.devstore_backend.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 import com.domain.devstore_backend.entities.Product;
 import com.domain.devstore_backend.services.ProductService;
 import org.springframework.transaction.annotation.Transactional;
 import com.domain.devstore_backend.exceptions.BadRequestException;
 import com.domain.devstore_backend.repositories.ProductRepository;
 import com.domain.devstore_backend.exceptions.ResourceNotFoundException;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +20,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return productRepository.findAll();
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
 

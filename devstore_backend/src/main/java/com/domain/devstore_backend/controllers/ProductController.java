@@ -3,17 +3,19 @@ package com.domain.devstore_backend.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import com.domain.devstore_backend.dto.ProductDto;
+import org.springframework.data.web.PageableDefault;
 import com.domain.devstore_backend.mapper.ProductMapper;
 import com.domain.devstore_backend.services.ProductService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-import java.util.List;
 
 @Tag(name = "Product")
 @RequiredArgsConstructor
@@ -28,8 +30,8 @@ public class ProductController {
     @GetMapping
     @Operation(summary = "Obter listagem", description = "Obtenção de lista de produtos")
     @ApiResponses(@ApiResponse(responseCode = "200", description = "Produtos obtidos com sucesso"))
-    public ResponseEntity<List<ProductDto>> findAll() {
-        List<ProductDto> productDtoList = ProductMapper.toListDto(productService.findAll());
+    public ResponseEntity<Page<ProductDto>> findAll(@PageableDefault(size = 6) Pageable pageable) {
+        Page<ProductDto> productDtoList = ProductMapper.toListDto(productService.findAll(pageable));
         return ResponseEntity.status(HttpStatus.OK).body(productDtoList);
     }
 

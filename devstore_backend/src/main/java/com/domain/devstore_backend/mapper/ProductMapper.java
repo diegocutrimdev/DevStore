@@ -1,9 +1,8 @@
 package com.domain.devstore_backend.mapper;
 
+import org.springframework.data.domain.Page;
 import com.domain.devstore_backend.dto.ProductDto;
 import com.domain.devstore_backend.entities.Product;
-
-import java.util.List;
 
 public class ProductMapper {
 
@@ -29,7 +28,7 @@ public class ProductMapper {
     }
 
 
-    public static List<ProductDto> toListDto(List<Product> products) {
-        return products.stream().map(ProductMapper::toDto).toList();
+    public static Page<ProductDto> toListDto(Page<Product> products) {
+        return products.map(ProductMapper::toDto);
     }
 }

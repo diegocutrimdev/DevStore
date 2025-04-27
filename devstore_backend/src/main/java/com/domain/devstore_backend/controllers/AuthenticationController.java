@@ -3,6 +3,7 @@ package com.domain.devstore_backend.controllers;
 import lombok.RequiredArgsConstructor;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import com.domain.devstore_backend.dto.RegisterUserDto;
 import com.domain.devstore_backend.dto.LoginResponseDto;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.domain.devstore_backend.dto.RegisteredUserResponseDto;
 import com.domain.devstore_backend.services.AuthenticationService;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Tag(name = "Authentication")
@@ -34,7 +37,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "401", description = "Credenciais inválidas"),
             @ApiResponse(responseCode = "400", description = "Requisição mal formatada")
     })
-    public ResponseEntity<LoginResponseDto> login(@RequestBody AuthenticationDto dto) {
+    public ResponseEntity<EntityModel<LoginResponseDto>> login(@RequestBody AuthenticationDto dto) {
         var login = authenticationService.login(dto);
         return ResponseEntity.ok().body(login);
     }
@@ -47,9 +50,10 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "400", description = "Dados de entrada inválidos"),
             @ApiResponse(responseCode = "409", description = "Usuário já existente")
     })
-    public ResponseEntity<RegisteredUserResponseDto> register(@RequestBody RegisterUserDto dto) {
+    public ResponseEntity<EntityModel<RegisteredUserResponseDto>> register(@RequestBody RegisterUserDto dto) {
         var savedUser = authenticationService.register(dto);
-        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.id()).toUri();
+        var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(Objects.requireNonNull(savedUser.getContent()).id()).toUri();
         return ResponseEntity.created(uri).body(savedUser);
     }
 }

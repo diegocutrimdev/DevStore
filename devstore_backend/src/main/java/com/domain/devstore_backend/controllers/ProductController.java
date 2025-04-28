@@ -1,7 +1,9 @@
 package com.domain.devstore_backend.controllers;
 
+import com.domain.devstore_backend.entities.Product;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,6 +17,8 @@ import com.domain.devstore_backend.mapper.ProductMapper;
 import com.domain.devstore_backend.services.ProductService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import java.util.Objects;
 
 
 @Tag(name = "Product")
@@ -30,8 +34,12 @@ public class ProductController {
     @GetMapping
     @Operation(summary = "Obter listagem", description = "Obtenção de lista de produtos")
     @ApiResponses(@ApiResponse(responseCode = "200", description = "Produtos obtidos com sucesso"))
-    public ResponseEntity<Page<ProductDto>> findAll(@PageableDefault(size = 6) Pageable pageable) {
-        Page<ProductDto> productDtoList = ProductMapper.toListDto(productService.findAll(pageable));
+    public ResponseEntity<Page<EntityModel<ProductDto>>> findAll(@PageableDefault(size = 6) Pageable pageable) {
+        Page<EntityModel<Product>> productEntityList = productService.findAll(pageable);
+        Page<EntityModel<ProductDto>> productDtoList = productEntityList.map(entityModel -> {
+            var productDto = ProductMapper.toDto(Objects.requireNonNull(entityModel.getContent()));
+            return EntityModel.of(productDto, entityModel.getLinks());
+        });
         return ResponseEntity.status(HttpStatus.OK).body(productDtoList);
     }
 
@@ -42,10 +50,10 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "Produto encontrado"),
             @ApiResponse(responseCode = "404", description = "Produto não encontrado")
     })
-    public ResponseEntity<ProductDto> findById(@PathVariable Integer id) {
-        var product = productService.findById(id);
-        var productDto = ProductMapper.toDto(product);
-        return ResponseEntity.status(HttpStatus.OK).body(productDto);
+    public ResponseEntity<EntityModel<ProductDto>> findById(@PathVariable Integer id) {
+        EntityModel<Product> productEntity = productService.findById(id);
+        var productDto = ProductMapper.toDto(Objects.requireNonNull(productEntity.getContent()));
+        return ResponseEntity.status(HttpStatus.OK).body(EntityModel.of(productDto, productEntity.getLinks()));
     }
 
 
@@ -56,11 +64,11 @@ public class ProductController {
             @ApiResponse(responseCode = "409", description = "Produto já cadastrado"),
             @ApiResponse(responseCode = "201", description = "Cadastro feito com sucesso")
     })
-    public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductDto dto) {
+    public ResponseEntity<EntityModel<ProductDto>> create(@Valid @RequestBody ProductDto dto) {
         var product = ProductMapper.toProduct(dto);
-        var savedProduct = productService.create(product);
-        var productDto = ProductMapper.toDto(savedProduct);
-        return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
+        EntityModel<Product> productEntity = productService.create(product);
+        var productDto = ProductMapper.toDto(Objects.requireNonNull(productEntity.getContent()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(EntityModel.of(productDto, productEntity.getLinks()));
     }
 
 
@@ -70,11 +78,11 @@ public class ProductController {
             @ApiResponse(responseCode = "404", description = "Produto não encontrado"),
             @ApiResponse(responseCode = "204", description = "Atualização feito com sucesso")}
     )
-    public ResponseEntity<ProductDto> update(@PathVariable Integer id, @Valid @RequestBody ProductDto dto) {
+    public ResponseEntity<EntityModel<ProductDto>> update(@PathVariable Integer id, @Valid @RequestBody ProductDto dto) {
         var product = ProductMapper.toProduct(dto);
-        var updatedProduct = productService.update(id, product);
-        var productDto = ProductMapper.toDto(updatedProduct);
-        return ResponseEntity.status(HttpStatus.OK).body(productDto);
+        EntityModel<Product> productEntity = productService.update(id, product);
+        var productDto = ProductMapper.toDto(Objects.requireNonNull(productEntity.getContent()));
+        return ResponseEntity.status(HttpStatus.OK).body(EntityModel.of(productDto, productEntity.getLinks()));
     }
 
 
@@ -84,8 +92,8 @@ public class ProductController {
             @ApiResponse(responseCode = "204", description = "Deletado com sucesso"),
             @ApiResponse(responseCode = "404", description = "Produto não encontrado")}
     )
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
-        productService.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<EntityModel<?>> delete(@PathVariable Integer id) {
+        EntityModel<?> productEntity = productService.delete(id);
+        return ResponseEntity.ok(productEntity);
     }
 }

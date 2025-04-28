@@ -1,20 +1,19 @@
 package com.domain.devstore_backend.services;
 
-import com.domain.devstore_backend.entities.Product;
 import org.springframework.data.domain.Page;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
+import com.domain.devstore_backend.entities.Product;
 
 public interface ProductService {
 
-    Page<Product> findAll(Pageable pageable);
+    Page<EntityModel<Product>> findAll(Pageable pageable);
 
-    Product findById(Integer id);
+    EntityModel<Product> findById(Integer id);
 
-    Product create(Product product);
+    EntityModel<Product> create(Product product);
 
-    Product update(Integer id, Product product);
+    EntityModel<Product> update(Integer id, Product product);
 
-    void delete(Integer id);
+    EntityModel<?> delete(Integer id);
 }

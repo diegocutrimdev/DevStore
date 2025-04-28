@@ -1,8 +1,8 @@
 package com.domain.devstore_backend.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
+import org.springframework.hateoas.EntityModel;
 import com.domain.devstore_backend.entities.User;
 import com.domain.devstore_backend.mapper.UserMapper;
 import com.domain.devstore_backend.dto.RegisterUserDto;
